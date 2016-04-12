@@ -11,6 +11,11 @@ main =
     Window.dimensions
 
 
+spritesInRow : Int
+spritesInRow =
+  6
+
+
 view : ( Int, Int ) -> Element
 view ( width, height ) =
   let
@@ -21,7 +26,13 @@ view ( width, height ) =
       height // 3
 
     sectionSize =
-      min (sectionWidth // 6) sectionHeight
+      min (sectionWidth // spritesInRow) sectionHeight
+
+    ratioPreservingWidth =
+      (sectionSize * spritesInRow)
+
+    ratioPreservingHeight =
+      sectionSize
   in
     E.container
       width
@@ -29,9 +40,9 @@ view ( width, height ) =
       E.middle
       <| E.flow
           E.down
-          [ spriteCollection (sectionSize * 6) sectionSize
-          , E.spacer (sectionSize * 6) sectionSize
-          , E.image (sectionSize * 6) sectionSize "spriteTestExpectedResult.png"
+          [ spriteCollection ratioPreservingWidth sectionSize
+          , E.spacer ratioPreservingWidth sectionSize
+          , E.image ratioPreservingWidth sectionSize "spriteTestExpectedResult.png"
           ]
 
 
@@ -39,7 +50,7 @@ spriteCollection : Int -> Int -> Element
 spriteCollection width height =
   let
     spriteWidth =
-      width // 6
+      width // spritesInRow
 
     spriteHeight =
       height
