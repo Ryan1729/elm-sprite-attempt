@@ -19,6 +19,9 @@ view ( width, height ) =
 
     sectionHeight =
       height // 3
+
+    sectionSize =
+      min (sectionWidth // 6) sectionHeight
   in
     E.container
       width
@@ -26,9 +29,9 @@ view ( width, height ) =
       E.middle
       <| E.flow
           E.down
-          [ spriteCollection sectionWidth sectionHeight
-          , E.spacer sectionWidth sectionHeight
-          , E.image sectionWidth sectionHeight "spriteTestExpectedResult.png"
+          [ spriteCollection (sectionSize * 6) sectionSize
+          , E.spacer (sectionSize * 6) sectionSize
+          , E.image (sectionSize * 6) sectionSize "spriteTestExpectedResult.png"
           ]
 
 
