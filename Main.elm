@@ -2,6 +2,7 @@ module Main (..) where
 
 import Window
 import Graphics.Element as E exposing (Element)
+import Text
 
 
 main : Signal Element
@@ -40,9 +41,9 @@ view ( width, height ) =
       E.middle
       <| E.flow
           E.down
-          [ spriteCollection ratioPreservingWidth sectionSize
-          , E.spacer ratioPreservingWidth sectionSize
-          , E.image ratioPreservingWidth sectionSize "spriteTestExpectedResult.png"
+          [ spriteCollection ratioPreservingWidth ratioPreservingHeight
+          , labels ratioPreservingWidth ratioPreservingHeight
+          , E.image ratioPreservingWidth ratioPreservingHeight "spriteTestExpectedResult.png"
           ]
 
 
@@ -74,6 +75,7 @@ spriteSize =
   64
 
 
+makeSprite : Int -> Int -> Int -> Element
 makeSprite width height index =
   E.croppedImage
     ( index * spriteSize, spriteSize // 2 )
@@ -83,3 +85,14 @@ makeSprite width height index =
     |> E.size
         width
         height
+
+
+labels : Int -> Int -> Element
+labels width height =
+  E.container width height E.middle
+    <| E.flow
+        E.down
+        [ E.leftAligned <| Text.fromString "sprite attempt &uarr;"
+        , E.spacer width (height // 3)
+        , E.leftAligned <| Text.fromString "desired result (with premade image) &darr;"
+        ]
