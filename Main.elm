@@ -3,6 +3,10 @@ module Main (..) where
 import Window
 import Graphics.Element as E exposing (Element)
 import Text
+import StaticSprite exposing (Sprite)
+import Html
+import Array
+import Html.Attributes as A
 
 
 main : Signal Element
@@ -47,6 +51,17 @@ view ( width, height ) =
           ]
 
 
+labels : Int -> Int -> Element
+labels width height =
+  E.container width height E.middle
+    <| E.flow
+        E.down
+        [ E.leftAligned <| Text.fromString "sprite attempt &uarr;"
+        , E.spacer width (height // 3)
+        , E.leftAligned <| Text.fromString "desired result (with premade image) &darr;"
+        ]
+
+
 spriteCollection : Int -> Int -> Element
 spriteCollection width height =
   let
@@ -77,22 +92,31 @@ spriteSize =
 
 makeSprite : Int -> Int -> Int -> Element
 makeSprite width height index =
-  E.croppedImage
-    ( index * spriteSize, spriteSize // 2 )
-    spriteSize
-    spriteSize
-    "spriteTest.png"
-    |> E.size
-        width
-        height
+  spriteToElement (min width height) (initSprite index)
 
 
-labels : Int -> Int -> Element
-labels width height =
-  E.container width height E.middle
-    <| E.flow
-        E.down
-        [ E.leftAligned <| Text.fromString "sprite attempt &uarr;"
-        , E.spacer width (height // 3)
-        , E.leftAligned <| Text.fromString "desired result (with premade image) &darr;"
-        ]
+initSprite : Int -> Sprite {}
+initSprite frame =
+  { sheet = "spriteTest.png"
+  , rows = 1
+  , columns = 3
+  , size = ( 192, 64 )
+  , frame = 0
+  , dope = Array.fromList [ ( frame, 0 ) ]
+  }
+
+
+spriteToElement : Int -> Sprite {} -> Element
+spriteToElement cellSize s =
+  Html.div
+    []
+    [ Html.node
+        "sprite"
+        [ A.style (StaticSprite.sprite s) ]
+        []
+    ]
+    --these int to toElement parameters don't seem to do anything.
+    |>
+      Html.toElement cellSize cellSize
+    |>
+      E.size cellSize cellSize
