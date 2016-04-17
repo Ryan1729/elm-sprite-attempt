@@ -101,20 +101,16 @@ initSprite frame =
   , rows = 1
   , columns = 3
   , size = ( 192, 64 )
-  , frame = 0
-  , dope = Array.fromList [ ( frame, 0 ) ]
+  , frame = ( frame, 0 )
   }
 
 
 spriteToElement : Int -> Sprite {} -> Element
 spriteToElement cellSize s =
-  Html.div
+  Html.node
+    "sprite"
+    [ A.style (StaticSprite.sprite s) ]
     []
-    [ Html.node
-        "sprite"
-        [ A.style (StaticSprite.sprite s) ]
-        []
-    ]
     --these int to toElement parameters don't seem to do anything.
     |>
       Html.toElement cellSize cellSize

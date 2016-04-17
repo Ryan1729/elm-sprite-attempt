@@ -14,16 +14,8 @@ type alias Sprite a =
     , rows : Int
     , columns : Int
     , size : ( Int, Int )
-    , frame : Int
-    , dope : Dope
+    , frame : ( Int, Int )
   }
-
-
-{-|
-The ordered frame coordinates representing an animation
--}
-type alias Dope =
-  Array ( Int, Int )
 
 
 {-|
@@ -33,7 +25,7 @@ and animate by altering the `background-position`. `height`, `width`
 are used for sizing, along with `display:block` for custom nodes.
 -}
 sprite : Sprite a -> List ( String, String )
-sprite { sheet, rows, columns, size, dope, frame } =
+sprite { sheet, rows, columns, size, frame } =
   let
     px x =
       toString x ++ "px"
@@ -42,12 +34,7 @@ sprite { sheet, rows, columns, size, dope, frame } =
       size
 
     ( frameX, frameY ) =
-      case Array.get frame dope of
-        Nothing ->
-          ( 0, 0 )
-
-        Just x ->
-          x
+      frame
 
     height =
       sizeY // rows
